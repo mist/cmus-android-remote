@@ -1,53 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Settings"
-        android:id="@+id/textView2" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Settings"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Version"
-            android:id="@+id/version"/>
+            android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
 
-
-    <CheckBox
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/album_art_section"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Fetch album artwork"
-        android:id="@+id/fetch_art"
-        android:checked="true" />
+        android:layout_gravity="top"
+        android:orientation="horizontal"
+        android:weightSum="1">
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        <CheckBox
+            android:id="@+id/fetch_art"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Fetch album artwork" />
+
+        <Button
+            android:id="@+id/clear_cache"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear art cache" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/volume_section"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Clear art cache"
-        android:id="@+id/clear_cache" />
+        android:layout_gravity="top"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/volumeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Volume Step +/-"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/volume_step_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="3"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:singleLine="true"
+            android:text="@integer/default_volume_step" />
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Hosts"
-        android:id="@+id/textView" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
+        android:id="@+id/hostList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/hostList"
         android:choiceMode="singleChoice" />
 </LinearLayout>

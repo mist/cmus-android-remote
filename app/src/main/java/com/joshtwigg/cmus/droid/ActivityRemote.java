@@ -131,10 +131,10 @@ public class ActivityRemote extends Activity implements ICallback {
                 }
                 break;
             case R.id.btnvoldown :
-                sendCommand(CmusCommand.VOLUME_DOWN);
+                sendCommand(CmusCommand.VOLUME_DOWN(_settings.VOLUME_STEP));
                 break;
             case R.id.btnvolup :
-                sendCommand(CmusCommand.VOLUME_UP);
+                sendCommand(CmusCommand.VOLUME_UP(_settings.VOLUME_STEP));
                 break;
             case R.id.btnshuffle :
                 sendCommand(CmusCommand.SHUFFLE);
