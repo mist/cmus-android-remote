@@ -133,6 +133,11 @@ public class CmusStatus {
         return getUnifiedVolumeInt() == 0;
     }
 
+    public boolean isPlaying() {
+        String status = get(STATUS);
+        return !(status.equals("stopped") || status.equals("paused"));
+    }
+
     @Override
     public String toString() {
         StringBuilder strBuilder = new StringBuilder();

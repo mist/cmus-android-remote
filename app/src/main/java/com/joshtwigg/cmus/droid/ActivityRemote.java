@@ -33,7 +33,7 @@ public class ActivityRemote extends Activity implements ICallback {
     private ImageView _albumArt;
     private static final Handler _pollHandler = new Handler();
     private Settings _settings;
-    private Runnable _pollRunnable = new Runnable() {
+    private final Runnable _pollRunnable = new Runnable() {
         @Override
         public void run() {
             sendCommand(CmusCommand.STATUS);
@@ -176,16 +176,80 @@ public class ActivityRemote extends Activity implements ICallback {
 
     @Override
     public void onAnswer(final CmusCommand command, final String answer) {
-        if (!command.equals(CmusCommand.STATUS)) {
-            return;
+        if (command.equals(CmusCommand.STATUS)) {
+            // set host
+            setTitle(String.format("%s:%d",_host.host, _host.port));
+            updateStatus(new CmusStatus(answer));
+        }
+    }
+
+    private void updateStatus(final CmusStatus cmusStatus) {
+        // don't update display if stopped.
+        // if ("stopped".equals(cmusStatus.get(CmusStatus.STATUS))) return;
+        updatePlayButton(cmusStatus);
+        if (cmusStatus.volumeIsZero()) {
+            _currentInfo.isMuted = true;
+        }
+        else {
+            _currentInfo.isMuted = false;
+            _currentInfo.lastRecordedVolume = cmusStatus.getUnifiedVolumeInt();
         }
 
-        final CmusStatus cmusStatus = new CmusStatus(answer);
-        // don't update display if stopped.
-        if ("stopped".equals(cmusStatus.get(CmusStatus.STATUS))) return;
-        // set host and track.
-        setTitle(String.format("%s:%d",_host.host, _host.port));
-        if (cmusStatus.get(CmusStatus.STATUS).equals("stopped") || cmusStatus.get(CmusStatus.STATUS).equals("paused")){
+        updateArtworkIfNeeded(cmusStatus);
+        updateTrackDetails(cmusStatus);
+        updateSeekBar(cmusStatus);
+        showPopups(cmusStatus);
+    }
+
+    private void updateSeekBar(CmusStatus cmusStatus) {
+        // check duration and position for seekbar
+        final int position = cmusStatus.getInt(CmusStatus.POSITION);
+        final int duration = cmusStatus.getInt(CmusStatus.DURATION);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (duration != -1 && position != -1) {
+                    _seekBar.setMax(duration);
+                    _seekBar.setProgress(position);
+                    _seekBar.postInvalidate();
+                }
+            }
+        });
+    }
+
+    private void updateTrackDetails(final CmusStatus cmusStatus) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                _trackDetails.setText(cmusStatus.toString());
+                _trackDetails.postInvalidate();
+            }
+        });
+    }
+
+    private void showPopups(CmusStatus cmusStatus) {
+        if (_showPopup.readShuffle()) {
+            showPopup("Shuffle is " + (cmusStatus.get(CmusStatus.SETTINGS.SHUFFLE).equals("true") ? "on" : "off"));
+        }
+        if (_showPopup.readRepeat()) {
+            showPopup("Repeat is " + (cmusStatus.get(CmusStatus.SETTINGS.REPEAT_CURRENT).equals("true")?"on":"off"));
+        }
+        if (_showPopup.readRepeatAll()) {
+            showPopup("Repeat all is " + (cmusStatus.get(CmusStatus.SETTINGS.REPEAT_ALL).equals("true")?"on":"off"));
+        }
+    }
+
+    private void showPopup(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(ActivityRemote.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updatePlayButton(CmusStatus cmusStatus) {
+        if (!cmusStatus.isPlaying()) {
             _currentInfo.isPlaying = false;
             runOnUiThread(new Runnable() {
                 @Override
@@ -203,72 +267,40 @@ public class ActivityRemote extends Activity implements ICallback {
                 }
             });
         }
-        if (cmusStatus.volumeIsZero()){
-            _currentInfo.isMuted = true;
-        }
-        else {
-            _currentInfo.isMuted = false;
-            _currentInfo.lastRecordedVolume = cmusStatus.getUnifiedVolumeInt();
-        }
-        // check image art is still correct
+    }
+
+    private void updateArtworkIfNeeded(CmusStatus cmusStatus) {
         if (_settings.FETCH_ARTWORK) {
+            // check image art is still correct
             if (!_currentInfo.album.equals(cmusStatus.get(CmusStatus.TAGS.ALBUM)) ||
                     !_currentInfo.artist.equals(cmusStatus.get(CmusStatus.TAGS.ARTIST))) {
-                _currentInfo.album = cmusStatus.get(CmusStatus.TAGS.ALBUM);
-                _currentInfo.artist = cmusStatus.get(CmusStatus.TAGS.ARTIST);
-                Log.d(getClass().getSimpleName(), "Detected different album, getting artwork.");
-                // change art
-                Runnable artFetch = new Runnable() {
-                    @Override
-                    public void run() {
-                        final Bitmap artwork = ArtRetriever.getArt(ActivityRemote.this, _currentInfo.album, _currentInfo.artist);
-                        Log.d(getClass().getSimpleName(), "artwork is" + (artwork==null?"":" not") + " null.");
-                        if (artwork != null) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    _albumArt.setImageBitmap(artwork);
-                                    _albumArt.postInvalidate(); //TODO: do i need this or will setBitmap call this?
-                                }
-                            });
-                        }
-                    };
-
-                };
-                _pollHandler.post(artFetch);
+                updateArtwork(cmusStatus);
             }
         }
-        // check duration and position for seekbar
-        final int position = cmusStatus.getInt(CmusStatus.POSITION);
-        final int duration = cmusStatus.getInt(CmusStatus.DURATION);
+    }
 
-        runOnUiThread(new Runnable() {
+    private void updateArtwork(CmusStatus cmusStatus) {
+        _currentInfo.album = cmusStatus.get(CmusStatus.TAGS.ALBUM);
+        _currentInfo.artist = cmusStatus.get(CmusStatus.TAGS.ARTIST);
+        Log.d(getClass().getSimpleName(), "Detected different album, getting artwork.");
+        // change art
+        Runnable artFetch = new Runnable() {
             @Override
             public void run() {
-                _trackDetails.setText(cmusStatus.toString());
-                _trackDetails.postInvalidate();
-                if (duration != -1 && position != -1) {
-                    _seekBar.setMax(duration);
-                    _seekBar.setProgress(position);
-                    _seekBar.postInvalidate();
-                }
-                if (_showPopup.readShuffle()) {
-                    Toast.makeText(ActivityRemote.this, "Shuffle is " +
-                            (cmusStatus.get(CmusStatus.SETTINGS.SHUFFLE).equals("true")?"on":"off"),
-                            Toast.LENGTH_SHORT).show();
-                }
-                if (_showPopup.readRepeat()) {
-                    Toast.makeText(ActivityRemote.this, "Repeat is " +
-                            (cmusStatus.get(CmusStatus.SETTINGS.REPEAT_CURRENT).equals("true")?"on":"off"),
-                            Toast.LENGTH_SHORT).show();
-                }
-                if (_showPopup.readRepeatAll()) {
-                    Toast.makeText(ActivityRemote.this, "Repeat all is " +
-                            (cmusStatus.get(CmusStatus.SETTINGS.REPEAT_ALL).equals("true")?"on":"off"),
-                            Toast.LENGTH_SHORT).show();
+                final Bitmap artwork = ArtRetriever.getArt(ActivityRemote.this, _currentInfo.album, _currentInfo.artist);
+                Log.d(getClass().getSimpleName(), "artwork is" + (artwork==null?"":" not") + " null.");
+                if (artwork != null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            _albumArt.setImageBitmap(artwork);
+                            _albumArt.postInvalidate(); //TODO: do i need this or will setBitmap call this?
+                        }
+                    });
                 }
             }
-        });
+        };
+        _pollHandler.post(artFetch);
     }
 
     @Override
