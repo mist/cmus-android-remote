@@ -134,7 +134,8 @@ public class ActivityRemote extends Activity implements ICallback {
                 sendCommand(CmusCommand.VOLUME_DOWN);
                 break;
             case R.id.btnvolup :
-                sendCommand(CmusCommand.VOLUME_UP);
+                // sendCommand(CmusCommand.VOLUME_UP);
+                sendCommand(CmusCommand.GET_PLAYLIST);
                 break;
             case R.id.btnshuffle :
                 sendCommand(CmusCommand.SHUFFLE);
@@ -180,6 +181,18 @@ public class ActivityRemote extends Activity implements ICallback {
             // set host
             setTitle(String.format("%s:%d",_host.host, _host.port));
             updateStatus(new CmusStatus(answer));
+        } else if (command.equals(CmusCommand.GET_PLAYLIST)) {
+            String[] playlist = answer.split("\n");
+            for (int j = 0; j < playlist.length; ++j) {
+                String[] path = playlist[j].split("/");
+                StringBuilder trackInfo = new StringBuilder();
+                for (int i = 0; i < Math.min(3, path.length); ++i) {
+                    trackInfo.append(path[path.length - i - 1]);
+                    trackInfo.append('|');
+                }
+                playlist[j] = trackInfo.toString();
+            }
+            showPopup(playlist[0]);
         }
     }
 

@@ -17,6 +17,7 @@ public class CmusCommand {
     public static final CmusCommand VOLUME_UP = new CmusCommand("vol +10%");
     public static final CmusCommand VOLUME_DOWN = new CmusCommand("vol -10%");
     public static final CmusCommand STATUS = new CmusCommand("status");
+    public static final CmusCommand GET_PLAYLIST = new CmusCommand("save -p -");
 
     // these functions create a new instance of commands that require a parameter
     public static CmusCommand SEEK(int position) {
