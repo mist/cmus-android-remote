@@ -14,12 +14,18 @@ public class CmusCommand {
     public static final CmusCommand PLAY = new CmusCommand("player-play");
     public static final CmusCommand PAUSE = new CmusCommand("player-pause");
     public static final CmusCommand VOLUME_MUTE = new CmusCommand("vol -100%");
-    public static final CmusCommand VOLUME_UP = new CmusCommand("vol +10%");
-    public static final CmusCommand VOLUME_DOWN = new CmusCommand("vol -10%");
     public static final CmusCommand STATUS = new CmusCommand("status");
     public static final CmusCommand GET_PLAYLIST = new CmusCommand("save -p -");
 
     // these functions create a new instance of commands that require a parameter
+    public static CmusCommand VOLUME_UP(int step) {
+        return new CmusCommand(String.format("vol +%s%%", step));
+    }
+
+    public static CmusCommand VOLUME_DOWN(int step) {
+        return new CmusCommand(String.format("vol -%s%%", step));
+    }
+
     public static CmusCommand SEEK(int position) {
         return new CmusCommand(String.format("seek %s", position));
     }

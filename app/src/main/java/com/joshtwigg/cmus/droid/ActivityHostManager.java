@@ -8,14 +8,18 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,6 +39,7 @@ public class ActivityHostManager extends Activity implements IReceiveHost {
         setContentView(R.layout.activity_host_manager);
         _settings = Storage.getSettings(ActivityHostManager.this);
         setupClearCacheAlert();
+
         CheckBox checkBox = (CheckBox)findViewById(R.id.fetch_art);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -43,6 +48,19 @@ public class ActivityHostManager extends Activity implements IReceiveHost {
             }
         });
         checkBox.setChecked(_settings.FETCH_ARTWORK);
+
+        final EditText volumeStep= (EditText) findViewById(R.id.volume_step_value);
+        volumeStep.setOnEditorActionListener(new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && !volumeStep.getText().toString().isEmpty()) {
+                    _settings.VOLUME_STEP = Integer.parseInt(volumeStep.getText().toString());
+                }
+                return false;
+            }
+        });
+        volumeStep.setText(String.valueOf(_settings.VOLUME_STEP));
+
         _hostAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         _hostView = (ListView) findViewById(R.id.hostList);
         _hostView.setAdapter(_hostAdapter);
@@ -113,6 +131,7 @@ public class ActivityHostManager extends Activity implements IReceiveHost {
             intent.putExtra(getResources().getString(R.string.intent_settings_extra), _settings);
             sendBroadcast(intent);
         }
+        super.onPause();
         super.onStop();
     }
 

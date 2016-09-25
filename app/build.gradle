@@ -49,6 +49,12 @@ android {
         }
         androidTest.setRoot('tests')
         androidTest.java.srcDirs = ['tests/src']
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
 
     }
 }
