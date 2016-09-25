@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import name.mist.cmus_remote.R;
+
 /**
  * Created by josh on 31/01/14.
  */

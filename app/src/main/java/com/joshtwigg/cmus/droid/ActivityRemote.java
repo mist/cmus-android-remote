@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import java.net.ConnectException;
 
+import name.mist.cmus_remote.R;
+
 /**
  * Created by josh on 31/01/14.
  */

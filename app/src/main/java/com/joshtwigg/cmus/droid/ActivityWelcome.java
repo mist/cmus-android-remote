@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import name.mist.cmus_remote.R;
+
 /**
  * Created by josh on 31/01/14.
  */
