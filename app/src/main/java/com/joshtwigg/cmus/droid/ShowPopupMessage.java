@@ -11,21 +11,21 @@ public class ShowPopupMessage {
     private boolean _shuffle = false;
     private final int _mills = 1000; //TODO: config this
 
-    private final Runnable _RunRepeat= new Runnable(){
+    private final Runnable _RunRepeat = new Runnable() {
         @Override
         public void run() {
             _repeat = true;
         }
     };
 
-    private final Runnable _RunRepeatAll= new Runnable(){
+    private final Runnable _RunRepeatAll = new Runnable() {
         @Override
         public void run() {
             _repeatAll = true;
         }
     };
 
-    private final Runnable _RunShuffle= new Runnable(){
+    private final Runnable _RunShuffle = new Runnable() {
         @Override
         public void run() {
             _shuffle = true;
@@ -53,10 +53,12 @@ public class ShowPopupMessage {
         if (_shuffle) return !(_shuffle = false);
         return false;
     }
+
     public boolean readRepeat() {
         if (_repeat) return !(_repeat = false);
         return false;
     }
+
     public boolean readRepeatAll() {
         if (_repeatAll) return !(_repeatAll = false);
         return false;

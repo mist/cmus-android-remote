@@ -1,8 +1,8 @@
 package com.joshtwigg.cmus.droid;
 
 /**
-* Created by josh on 31/01/14.
-*/
+ * Created by josh on 31/01/14.
+ */
 public class CmusCommand {
     // these are commands that don't require a parameter
     public static final CmusCommand REPEAT = new CmusCommand("toggle repeat_current");

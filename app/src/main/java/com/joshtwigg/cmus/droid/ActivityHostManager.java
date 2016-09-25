@@ -40,7 +40,7 @@ public class ActivityHostManager extends Activity implements IReceiveHost {
         _settings = Storage.getSettings(ActivityHostManager.this);
         setupClearCacheAlert();
 
-        CheckBox checkBox = (CheckBox)findViewById(R.id.fetch_art);
+        CheckBox checkBox = (CheckBox) findViewById(R.id.fetch_art);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -49,7 +49,7 @@ public class ActivityHostManager extends Activity implements IReceiveHost {
         });
         checkBox.setChecked(_settings.FETCH_ARTWORK);
 
-        final EditText volumeStep= (EditText) findViewById(R.id.volume_step_value);
+        final EditText volumeStep = (EditText) findViewById(R.id.volume_step_value);
         volumeStep.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -69,7 +69,8 @@ public class ActivityHostManager extends Activity implements IReceiveHost {
             @Override
             public void onItemClick(AdapterView<?> adapter, View item, int position, long id) {
                 String address = adapter.getItemAtPosition(position).toString();
-                if (address != null && address.equals(getResources().getString(R.string.add_new))) address = "";
+                if (address != null && address.equals(getResources().getString(R.string.add_new)))
+                    address = "";
                 ActivityHostManager.this.startActivityForResult(ActivityHostDialog.getStartIntent(ActivityHostManager.this, address), REQUEST_CODE);
             }
         });
@@ -92,7 +93,7 @@ public class ActivityHostManager extends Activity implements IReceiveHost {
                 trimCache();
             }
         });
-        Button button = (Button)findViewById(R.id.clear_cache);
+        Button button = (Button) findViewById(R.id.clear_cache);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,9 +109,9 @@ public class ActivityHostManager extends Activity implements IReceiveHost {
 
     private void setupVersionInfo() {
         try {
-        PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-        TextView version = (TextView)findViewById(R.id.version);
-        version.setText("Version " + pInfo.versionName);
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            TextView version = (TextView) findViewById(R.id.version);
+            version.setText("Version " + pInfo.versionName);
         } catch (Exception e) {
             Log.e(getClass().getSimpleName(), "Error setting version number", e);
         }

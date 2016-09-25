@@ -37,9 +37,7 @@ public class CommandThread extends Thread {
         final String cmdAnswer = readAnswer(in);
         if (cmdAnswer != null && cmdAnswer.trim().length() != 0) {
             _callback.onAnswer(command, cmdAnswer);
-        }
-        else
-        {
+        } else {
             _callback.onError(new Exception("Empty response from cmus."));
         }
     }

@@ -26,13 +26,13 @@ public class ArtRetriever {
 
     private static String[] getImageUrl(final String album, final String artist) {
         URLConnection connection = null;
-        try{
+        try {
             URL url = new URL(GOOGLE_IMAGE_API_URL + album.replace(' ', '+') + "+" + artist.replace(' ', '+') + "+album+cover");
             connection = url.openConnection();
             String line;
             StringBuilder builder = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            while((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 builder.append(line);
             }
             reader.close();
@@ -44,18 +44,17 @@ public class ArtRetriever {
             }
             return urls;
 
-        } catch(Exception e){
+        } catch (Exception e) {
             try {
-                int code = ((HttpURLConnection)connection).getResponseCode();
-                String msg =  ((HttpURLConnection)connection).getResponseMessage();
+                int code = ((HttpURLConnection) connection).getResponseCode();
+                String msg = ((HttpURLConnection) connection).getResponseMessage();
                 Log.e(ArtRetriever.class.getSimpleName(), "Code " + code + ". message: " + msg + ".", e);
-            }
-            catch (Exception f) {
+            } catch (Exception f) {
 
             }
             Log.e(ArtRetriever.class.getSimpleName(), "Could not retrieve image url.", e);
         }
-        return new String[] {};
+        return new String[]{};
     }
 
     private static Bitmap getArtFromUrl(final String url) {
@@ -68,10 +67,9 @@ public class ArtRetriever {
         } catch (Exception e) {
             Log.e(ArtRetriever.class.getSimpleName(), "Could not download image from url {" + url + "}", e);
         } finally {
-            try{
+            try {
                 in.close();
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
 
             }
         }
@@ -80,7 +78,7 @@ public class ArtRetriever {
     }
 
     private static File saveImage(final Context context, final Bitmap image, final String album, final String artist) {
-        File file =  new File(context.getCacheDir(), getName(context, album, artist));
+        File file = new File(context.getCacheDir(), getName(context, album, artist));
         try {
             file.createNewFile();
             FileOutputStream fileOut = new FileOutputStream(file);
@@ -111,8 +109,7 @@ public class ArtRetriever {
         }
         try {
             return BitmapFactory.decodeStream(new FileInputStream(imageFile));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e(ArtRetriever.class.getSimpleName(), "Error getting artwork from decoding stream.", e);
         }
         return null;

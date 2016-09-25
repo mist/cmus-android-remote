@@ -5,5 +5,6 @@ package com.joshtwigg.cmus.droid;
  */
 public interface ICallback {
     void onAnswer(CmusCommand command, String answer);
+
     void onError(Exception e);
 }

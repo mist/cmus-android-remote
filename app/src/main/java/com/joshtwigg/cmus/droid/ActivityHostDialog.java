@@ -34,8 +34,7 @@ public class ActivityHostDialog extends Activity {
             // type new address
             Log.d(getClass().getSimpleName(), "host is empty.");
             _port.setText(getResources().getText(R.integer.default_port).toString());
-        }
-        else {
+        } else {
             // load saved or default values
             _host.setText(_hostAddress);
             int port = Storage.getPort(this, _hostAddress);
@@ -62,12 +61,11 @@ public class ActivityHostDialog extends Activity {
 
         try {
             port = Integer.parseInt(_port.getText().toString());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             AlertDialog.Builder b = new AlertDialog.Builder(this);
             b.setTitle("Problem");
-            b.setMessage( String.format("You must specify a port, the default is %s.",
-                    getResources().getText(R.integer.default_port)) );
+            b.setMessage(String.format("You must specify a port, the default is %s.",
+                    getResources().getText(R.integer.default_port)));
             b.setPositiveButton("Okay", null);
             b.show();
             return;

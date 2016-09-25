@@ -51,7 +51,7 @@ public final class Util {
                 try {
                     InetAddress localhost = null;
 
-                    for (final Enumeration<NetworkInterface> interfaces = NetworkInterface .getNetworkInterfaces(); interfaces.hasMoreElements() && localhost == null;) {
+                    for (final Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces(); interfaces.hasMoreElements() && localhost == null; ) {
                         final NetworkInterface cur = interfaces.nextElement();
 
                         if (cur.getName().equals("lo")) {
@@ -61,7 +61,7 @@ public final class Util {
 
                         for (final Enumeration<InetAddress> inetAddresses = cur
                                 .getInetAddresses(); inetAddresses
-                                     .hasMoreElements() && localhost == null;) {
+                                     .hasMoreElements() && localhost == null; ) {
                             final InetAddress inet_addr = inetAddresses
                                     .nextElement();
 

@@ -55,15 +55,14 @@ public class ActivityRemote extends Activity implements ICallback {
         _settings = Storage.getSettings(this);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setContentView(R.layout.activity_remote_horizontal);
-        }
-        else {
+        } else {
             setContentView(R.layout.activity_remote);
         }
         _trackDetails = (TextView) findViewById(R.id.track_details);
         _trackDetails.setBackgroundColor(Color.argb(150, 0, 0, 0));
-        _playButton = (ImageButton)findViewById(R.id.btnplay);
-        _albumArt = (ImageView)findViewById(R.id.album_art);
-        _seekBar = (SeekBar)findViewById(R.id.seekBar);
+        _playButton = (ImageButton) findViewById(R.id.btnplay);
+        _albumArt = (ImageView) findViewById(R.id.album_art);
+        _seekBar = (SeekBar) findViewById(R.id.seekBar);
         _seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -119,51 +118,51 @@ public class ActivityRemote extends Activity implements ICallback {
     }
 
     public void onClick(View view) {
-        switch(view.getId()) {
-            case R.id.btnsettings :
+        switch (view.getId()) {
+            case R.id.btnsettings:
                 ActivityHostManager.Show(this);
                 break;
-            case R.id.btnmute :
+            case R.id.btnmute:
                 if (_currentInfo.isMuted && _currentInfo.lastRecordedVolume > 0) {
                     sendCommand(CmusCommand.VOLUME(_currentInfo.lastRecordedVolume));
                 } else {
                     sendCommand(CmusCommand.VOLUME_MUTE);
                 }
                 break;
-            case R.id.btnvoldown :
+            case R.id.btnvoldown:
                 sendCommand(CmusCommand.VOLUME_DOWN(_settings.VOLUME_STEP));
                 break;
-            case R.id.btnvolup :
+            case R.id.btnvolup:
                 // sendCommand(CmusCommand.VOLUME_UP);
                 // sendCommand(CmusCommand.GET_PLAYLIST);
                 sendCommand(CmusCommand.VOLUME_UP(_settings.VOLUME_STEP));
                 break;
-            case R.id.btnshuffle :
+            case R.id.btnshuffle:
                 sendCommand(CmusCommand.SHUFFLE);
                 _showPopup.getShuffle(_pollHandler);
                 break;
-            case R.id.btnrepeat :
+            case R.id.btnrepeat:
                 sendCommand(CmusCommand.REPEAT);
                 _showPopup.getRepeat(_pollHandler);
                 break;
-            case R.id.btnrepeatall :
+            case R.id.btnrepeatall:
                 sendCommand(CmusCommand.REPEAT_ALL);
                 _showPopup.getRepeatAll(_pollHandler);
                 break;
-            case R.id.btnback :
+            case R.id.btnback:
                 sendCommand(CmusCommand.PREV);
                 break;
-            case R.id.btnstop :
+            case R.id.btnstop:
                 sendCommand(CmusCommand.STOP);
                 break;
-            case R.id.btnplay :
+            case R.id.btnplay:
                 if (_currentInfo.isPlaying) {
                     sendCommand(CmusCommand.PAUSE);
                 } else {
                     sendCommand(CmusCommand.PLAY);
                 }
                 break;
-            case R.id.btnforward :
+            case R.id.btnforward:
                 sendCommand(CmusCommand.NEXT);
                 break;
         }
@@ -180,7 +179,7 @@ public class ActivityRemote extends Activity implements ICallback {
     public void onAnswer(final CmusCommand command, final String answer) {
         if (command.equals(CmusCommand.STATUS)) {
             // set host
-            setTitle(String.format("%s:%d",_host.host, _host.port));
+            setTitle(String.format("%s:%d", _host.host, _host.port));
             updateStatus(new CmusStatus(answer));
         } else if (command.equals(CmusCommand.GET_PLAYLIST)) {
             String[] playlist = answer.split("\n");
@@ -203,8 +202,7 @@ public class ActivityRemote extends Activity implements ICallback {
         updatePlayButton(cmusStatus);
         if (cmusStatus.volumeIsZero()) {
             _currentInfo.isMuted = true;
-        }
-        else {
+        } else {
             _currentInfo.isMuted = false;
             _currentInfo.lastRecordedVolume = cmusStatus.getUnifiedVolumeInt();
         }
@@ -246,10 +244,10 @@ public class ActivityRemote extends Activity implements ICallback {
             showPopup("Shuffle is " + (cmusStatus.get(CmusStatus.SETTINGS.SHUFFLE).equals("true") ? "on" : "off"));
         }
         if (_showPopup.readRepeat()) {
-            showPopup("Repeat is " + (cmusStatus.get(CmusStatus.SETTINGS.REPEAT_CURRENT).equals("true")?"on":"off"));
+            showPopup("Repeat is " + (cmusStatus.get(CmusStatus.SETTINGS.REPEAT_CURRENT).equals("true") ? "on" : "off"));
         }
         if (_showPopup.readRepeatAll()) {
-            showPopup("Repeat all is " + (cmusStatus.get(CmusStatus.SETTINGS.REPEAT_ALL).equals("true")?"on":"off"));
+            showPopup("Repeat all is " + (cmusStatus.get(CmusStatus.SETTINGS.REPEAT_ALL).equals("true") ? "on" : "off"));
         }
     }
 
@@ -271,8 +269,7 @@ public class ActivityRemote extends Activity implements ICallback {
                     _playButton.setImageResource(R.drawable.play);
                 }
             });
-        }
-        else {
+        } else {
             _currentInfo.isPlaying = true;
             runOnUiThread(new Runnable() {
                 @Override
@@ -302,7 +299,7 @@ public class ActivityRemote extends Activity implements ICallback {
             @Override
             public void run() {
                 final Bitmap artwork = ArtRetriever.getArt(ActivityRemote.this, _currentInfo.album, _currentInfo.artist);
-                Log.d(getClass().getSimpleName(), "artwork is" + (artwork==null?"":" not") + " null.");
+                Log.d(getClass().getSimpleName(), "artwork is" + (artwork == null ? "" : " not") + " null.");
                 if (artwork != null) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -321,8 +318,7 @@ public class ActivityRemote extends Activity implements ICallback {
     public void onError(Exception e) {
         if (e != null && e.getMessage() != null && e.getMessage().startsWith("Could not login")) {
             setTitle("CMUS Remote [Could not login, check password]");
-        }
-        else if (e instanceof ConnectException) {
+        } else if (e instanceof ConnectException) {
             setTitle("CMUS Remote [Connection error, check host]");
         }
     }

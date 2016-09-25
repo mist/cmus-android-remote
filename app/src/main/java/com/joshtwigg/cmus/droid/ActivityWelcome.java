@@ -18,7 +18,7 @@ public class ActivityWelcome extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_welcome);
-        ((TextView)findViewById(R.id.body)).setMovementMethod(LinkMovementMethod.getInstance()); // applies the html tags
+        ((TextView) findViewById(R.id.body)).setMovementMethod(LinkMovementMethod.getInstance()); // applies the html tags
     }
 
     @Override

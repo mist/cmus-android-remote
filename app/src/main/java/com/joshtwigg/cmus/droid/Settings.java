@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by josh on 08/02/14.
  */
-public class Settings implements Serializable{
+public class Settings implements Serializable {
     private static final String KEY_POLL_MILLS = "KEY_POLL_MILLS";
     private static final String KEY_FETCHARTWORK = "KEY_FETCHARTWORK";
     private static final String KEY_VOLUME_TIMEOUT = "KEY_VOLUME_TIMEOUT";

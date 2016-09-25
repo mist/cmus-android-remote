@@ -6,33 +6,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
- status playing
- file /home/josh/Music/Radiohead - The Best Of Radiohead 2008/1-12 Idioteque.mp3
- duration 277
- position 0
- tag artist Radiohead
- tag album The Best Of Radiohead 2008
- tag title Idioteque
- tag date 2008
- tag genre Rock
- tag discnumber 1
- tag tracknumber 12
- tag albumartist Radiohead
- tag replaygain_track_gain -7.2 dB
- set aaa_mode all
- set continue true
- set play_library true
- set play_sorted false
- set replaygain disabled
- set replaygain_limit true
- set replaygain_preamp 6.000000
- set repeat false
- set repeat_current false
- set shuffle false
- set softvol false
- set vol_left 100
- set vol_right 100
+ * status playing
+ * file /home/josh/Music/Radiohead - The Best Of Radiohead 2008/1-12 Idioteque.mp3
+ * duration 277
+ * position 0
+ * tag artist Radiohead
+ * tag album The Best Of Radiohead 2008
+ * tag title Idioteque
+ * tag date 2008
+ * tag genre Rock
+ * tag discnumber 1
+ * tag tracknumber 12
+ * tag albumartist Radiohead
+ * tag replaygain_track_gain -7.2 dB
+ * set aaa_mode all
+ * set continue true
+ * set play_library true
+ * set play_sorted false
+ * set replaygain disabled
+ * set replaygain_limit true
+ * set replaygain_preamp 6.000000
+ * set repeat false
+ * set repeat_current false
+ * set shuffle false
+ * set softvol false
+ * set vol_left 100
+ * set vol_right 100
  */
 public class CmusStatus {
 
@@ -63,12 +62,13 @@ public class CmusStatus {
         public static final String REPLAYGAIN_PREAMP = "replaygain_preamp";
         public static final String REPEAT_ALL = "repeat";
         public static final String REPEAT_CURRENT = "repeat_current";
-        public static final String SHUFFLE= "shuffle";
+        public static final String SHUFFLE = "shuffle";
         public static final String SOFTVOL = "s oftvol";
         public static final String VOL_LEFT = "vol_left";
         public static final String VOL_RIGHT = "vol_right";
 
     }
+
     private Map<String, String> _map = new HashMap<String, String>();
 
     public CmusStatus(final String answer) {
@@ -98,8 +98,7 @@ public class CmusStatus {
     public int getInt(final String tagOrSettingConst) {
         try {
             return Integer.parseInt(_map.get(tagOrSettingConst));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.e(getClass().getSimpleName(), String.format("Error parsing %s as int.", tagOrSettingConst), e);
         }
         return -1; // don't return 0 in case the caller was planning to divide.
@@ -122,7 +121,7 @@ public class CmusStatus {
 
             Float volRightF = Float.parseFloat(volRight);
             Float volLeftF = Float.parseFloat(volLeft);
-            return (int)((volRightF + volLeftF) / 2.0f);
+            return (int) ((volRightF + volLeftF) / 2.0f);
         } catch (Exception e) {
             Log.w(getClass().getSimpleName(), e);
             return -1;
