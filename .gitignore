@@ -1,1 +1,11 @@
 ./build/*
+/build/
+/app/build/
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/inspectionProfiles/
+.DS_Store
+/captures
